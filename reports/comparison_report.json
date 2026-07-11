@@ -1,0 +1,8 @@
+{
+  "baseline_backend": "local_cpu_fallback",
+  "candidate_backend": "local_cpu_fallback",
+  "claim_boundary": "Only use speedup values when comparable_settings is true and both reports were collected from equivalent hardware, model, batch, and input settings.",
+  "comparable_settings": true,
+  "mean_speedup": 1.0,
+  "p95_speedup": 1.0
+}
