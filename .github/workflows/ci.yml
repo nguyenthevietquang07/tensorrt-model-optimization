@@ -14,3 +14,7 @@ jobs:
           python-version: "3.11"
       - name: Run unit tests
         run: python -m unittest discover -s tests
+      - name: Run local benchmark demo
+        run: python -m src.modelopt.benchmark --trials 25 --output /tmp/local_cpu_report.json
+      - name: Run comparison report
+        run: python scripts/compare_reports.py --baseline /tmp/local_cpu_report.json --candidate /tmp/local_cpu_report.json
