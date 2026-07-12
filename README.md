@@ -20,6 +20,45 @@ benchmarks, and clear fallback behavior when TensorRT is unavailable.
 - CI tests for benchmark reporting and configuration
 - QA notes for avoiding unverifiable speedup claims
 
+## Tech Stack
+
+| Layer | Tools |
+|---|---|
+| Benchmarking | Python, dataclasses, timing harness, JSON reports |
+| Model path | local CPU fallback, ONNX/TensorRT extension points |
+| GPU workflow | Colab notebook plan for training/export/acceleration evidence |
+| Validation | comparable-setting checks, baseline/candidate report comparison |
+| Quality | unittest, benchmark demo, comparison demo, GitHub Actions |
+
+## Demo Flow
+
+```mermaid
+flowchart LR
+    A["Run local benchmark"] --> B["Execute CPU fallback workload"]
+    B --> C["Collect latency samples"]
+    C --> D["Write benchmark JSON"]
+    D --> E["Compare baseline vs candidate"]
+    E --> F["Check comparable settings"]
+    F --> G["Write comparison report"]
+    G --> H["CI verifies tests, benchmark, and comparison"]
+```
+
+## Optimization Boundary
+
+```mermaid
+flowchart TB
+    Model["Model or workload"] --> Baseline["Baseline benchmark"]
+    Model --> Candidate["Optimized benchmark path"]
+    Baseline --> Compare["Comparison utility"]
+    Candidate --> Compare
+    Compare --> Evidence["Saved evidence report"]
+    Colab["Colab GPU workflow"] --> Export["Future ONNX export"]
+    Export --> TensorRT["Future TensorRT engine"]
+    TensorRT --> Candidate
+    Tests["Unit tests"] --> Compare
+    Tests --> Evidence
+```
+
 ## Quickstart
 
 ```bash
