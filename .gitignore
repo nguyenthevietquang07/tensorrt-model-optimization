@@ -7,6 +7,7 @@ reports/*
 !reports/local_cpu_report.json
 !reports/demo_benchmark.json
 !reports/comparison_report.json
+!reports/iris_real_data_benchmark.json
 models/
 *.onnx
 *.engine
