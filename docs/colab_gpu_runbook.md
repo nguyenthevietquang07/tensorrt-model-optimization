@@ -41,3 +41,20 @@ Use TensorRT-specific wording only when:
 If the selected provider is `CUDAExecutionProvider`, describe the result as
 ONNX Runtime GPU evidence and reserve TensorRT wording for a run that actually
 uses `TensorrtExecutionProvider`.
+
+## Latest Verified Run
+
+The committed artifact set was generated on 2026-07-13 in a Colab GPU runtime
+using a Tesla T4. `reports/colab_gpu_environment.json` selected
+`TensorrtExecutionProvider`, and `reports/colab_gpu_validation.json` passed all
+checks.
+
+| Measurement | Value |
+|---|---:|
+| Baseline backend | `pytorch_cuda_mlp` |
+| Candidate backend | `onnxruntime_tensorrt` |
+| Trials per backend | 200 |
+| Mean speedup | 11.1290x |
+| p95 speedup | 10.7977x |
+| Prediction agreement | 1.0 |
+| Max absolute logit difference | 0.0 |

@@ -1,0 +1,12 @@
+{
+  "baseline_backend": "pytorch_cuda_mlp",
+  "candidate_backend": "onnxruntime_tensorrt",
+  "claim_boundary": "Correctness compares PyTorch CUDA logits and the selected ONNX Runtime GPU/TensorRT provider on the same batch.",
+  "cpu_onnx_correctness_passed": true,
+  "max_abs_diff": 0.0,
+  "passed": true,
+  "prediction_agreement": 1.0,
+  "project": "tensorrt-model-optimization",
+  "provider": "TensorrtExecutionProvider",
+  "stage": "colab_gpu_correctness"
+}

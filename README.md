@@ -108,8 +108,28 @@ Latest ONNX report artifacts:
 | PyTorch/ONNX prediction agreement | 1.0 |
 | Max logit absolute difference | 0.00000095 |
 
-This is real local CPU inference evidence. TensorRT speedup evidence requires a
-saved GPU/TensorRT report from comparable hardware and input settings.
+This is real local CPU inference evidence.
+
+Latest Colab TensorRT GPU artifacts:
+
+| Measurement | Value |
+|---|---:|
+| GPU | Tesla T4 |
+| Provider | TensorrtExecutionProvider |
+| Baseline backend | PyTorch CUDA MLP |
+| Candidate backend | ONNX Runtime TensorRT |
+| PyTorch CUDA mean latency | 0.2070 ms |
+| TensorRT mean latency | 0.0186 ms |
+| Comparable mean speedup | 11.1290x |
+| Comparable p95 speedup | 10.7977x |
+| Trials per backend | 200 |
+| Prediction agreement | 1.0 |
+| Max logit absolute difference | 0.0 |
+| Artifact validation | passed |
+
+These TensorRT numbers come from a saved Colab GPU run on comparable hardware,
+batch size, precision, model, and input settings. The reports remain scoped to
+this Iris MLP benchmark and should not be generalized to unrelated models.
 
 ## Colab GPU Artifact Workflow
 

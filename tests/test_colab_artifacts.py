@@ -5,6 +5,8 @@ from pathlib import Path
 
 from scripts.validate_colab_gpu_artifacts import validate_artifacts
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 def write_report(reports_dir: Path, name: str, payload: dict[str, object]) -> None:
     (reports_dir / name).write_text(json.dumps(payload), encoding="utf-8")
@@ -70,6 +72,14 @@ class ColabArtifactValidationTests(unittest.TestCase):
 
         self.assertFalse(report["passed"])
         self.assertFalse(report["checks"]["provider_is_gpu"])
+
+    def test_committed_colab_tensorrt_artifacts_validate(self):
+        report = validate_artifacts(ROOT / "reports")
+
+        self.assertTrue(report["passed"])
+        self.assertEqual(report["selected_provider"], "TensorrtExecutionProvider")
+        self.assertEqual(report["caveats"], [])
+        self.assertGreater(report["mean_speedup"], 1.0)
 
 
 if __name__ == "__main__":

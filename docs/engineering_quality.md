@@ -11,6 +11,8 @@ separation between CPU, GPU, and TensorRT evidence.
 - Correctness comparison between PyTorch logits and ONNX Runtime logits.
 - Comparable-report validation before using any speedup metric.
 - Colab GPU notebook and artifact validator for CUDA/TensorRT evidence.
+- Saved Colab TensorRT artifact set with TensorRT provider, correctness, and
+  comparable-setting validation.
 - Unit tests and GitHub Actions CI.
 
 ## Evidence Rules

@@ -1,0 +1,20 @@
+{
+  "caveats": [],
+  "checks": {
+    "comparable_settings": true,
+    "correctness_passed": true,
+    "cuda_available": true,
+    "finite_speedup": true,
+    "minimum_trials": true,
+    "provider_consistent": true,
+    "provider_is_gpu": true
+  },
+  "claim_boundary": "Passing validation means Colab GPU artifacts are structurally usable. TensorRT-specific claims require selected_provider == TensorrtExecutionProvider.",
+  "gpu_name": "Tesla T4",
+  "mean_speedup": 11.129,
+  "p95_speedup": 10.7977,
+  "passed": true,
+  "project": "tensorrt-model-optimization",
+  "selected_provider": "TensorrtExecutionProvider",
+  "stage": "colab_gpu_artifact_validation"
+}

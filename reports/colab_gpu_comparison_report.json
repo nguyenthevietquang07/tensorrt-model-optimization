@@ -1,0 +1,8 @@
+{
+  "baseline_backend": "pytorch_cuda_mlp",
+  "candidate_backend": "onnxruntime_tensorrt",
+  "claim_boundary": "Only use speedup values when comparable_settings is true and both reports were collected from equivalent hardware, model, batch, and input settings.",
+  "comparable_settings": true,
+  "mean_speedup": 11.129,
+  "p95_speedup": 10.7977
+}

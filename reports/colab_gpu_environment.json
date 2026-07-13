@@ -1,0 +1,18 @@
+{
+  "available_onnxruntime_providers": [
+    "TensorrtExecutionProvider",
+    "CUDAExecutionProvider",
+    "CPUExecutionProvider"
+  ],
+  "claim_boundary": "Environment report records provider availability. CUDA evidence is not TensorRT evidence unless selected_provider is TensorrtExecutionProvider.",
+  "cuda_available": true,
+  "generated_at": "2026-07-13T08:53:26.474351+00:00",
+  "gpu_name": "Tesla T4",
+  "onnxruntime": "1.26.0",
+  "project": "tensorrt-model-optimization",
+  "python": "3.12.13",
+  "selected_provider": "TensorrtExecutionProvider",
+  "stage": "colab_gpu_environment",
+  "tensorrt_provider_available": true,
+  "torch": "2.11.0+cu128"
+}

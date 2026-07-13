@@ -23,19 +23,25 @@ def validate_artifacts(reports_dir: Path = REPORTS) -> dict[str, Any]:
     correctness = load_report("colab_gpu_correctness_report.json", reports_dir)
     comparison = load_report("colab_gpu_comparison_report.json", reports_dir)
 
+    candidate_provider = candidate.get("metadata", {}).get("provider")
+    selected_provider = environment.get("selected_provider")
+    provider_consistent = selected_provider != "TensorrtExecutionProvider" or candidate_provider == selected_provider
     checks = {
         "cuda_available": environment.get("cuda_available") is True,
         "provider_is_gpu": candidate.get("backend") in {"onnxruntime_cuda", "onnxruntime_tensorrt"},
+        "provider_consistent": provider_consistent,
         "minimum_trials": min(int(pytorch.get("trials", 0)), int(candidate.get("trials", 0))) >= 50,
         "comparable_settings": comparison.get("comparable_settings") is True,
         "correctness_passed": correctness.get("passed") is True,
         "finite_speedup": float(comparison.get("mean_speedup", 0.0)) > 0,
     }
     caveats: list[str] = []
-    if environment.get("selected_provider") != "TensorrtExecutionProvider":
+    if selected_provider != "TensorrtExecutionProvider":
         caveats.append(
             "TensorRT provider was not selected; artifacts support GPU/ONNX Runtime evidence, not TensorRT speedup claims."
         )
+    if not provider_consistent:
+        caveats.append("Selected TensorRT provider does not match the candidate report provider metadata.")
     if float(comparison.get("mean_speedup", 0.0)) > 25:
         caveats.append("Mean speedup is very large; manually inspect warmup, synchronization, and timing methodology.")
 
@@ -44,7 +50,7 @@ def validate_artifacts(reports_dir: Path = REPORTS) -> dict[str, Any]:
         "stage": "colab_gpu_artifact_validation",
         "checks": checks,
         "passed": all(checks.values()),
-        "selected_provider": environment.get("selected_provider"),
+        "selected_provider": selected_provider,
         "gpu_name": environment.get("gpu_name"),
         "mean_speedup": comparison.get("mean_speedup"),
         "p95_speedup": comparison.get("p95_speedup"),
