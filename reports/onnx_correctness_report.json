@@ -1,0 +1,10 @@
+{
+  "baseline_backend": "pytorch_cpu_mlp",
+  "candidate_backend": "onnxruntime_cpu",
+  "claim_boundary": "Correctness report compares PyTorch and ONNX Runtime logits on the same local CPU test batch.",
+  "max_abs_diff": 9.5e-07,
+  "passed": true,
+  "prediction_agreement": 1.0,
+  "project": "tensorrt-model-optimization",
+  "stage": "onnx_correctness"
+}

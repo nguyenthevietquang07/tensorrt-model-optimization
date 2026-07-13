@@ -3,6 +3,6 @@
   "candidate_backend": "onnxruntime_cpu",
   "claim_boundary": "Only use speedup values when comparable_settings is true and both reports were collected from equivalent hardware, model, batch, and input settings.",
   "comparable_settings": true,
-  "mean_speedup": 2.9244,
-  "p95_speedup": 4.4027
+  "mean_speedup": 2.3089,
+  "p95_speedup": 3.0878
 }

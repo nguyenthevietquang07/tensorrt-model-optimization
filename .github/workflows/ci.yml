@@ -12,9 +12,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
       - name: Run unit tests
         run: python -m unittest discover -s tests
       - name: Run local benchmark demo
         run: python -m src.modelopt.benchmark --trials 25 --output /tmp/local_cpu_report.json
+      - name: Run PyTorch ONNX demo
+        run: python scripts/torch_onnx_demo.py
       - name: Run comparison report
-        run: python scripts/compare_reports.py --baseline /tmp/local_cpu_report.json --candidate /tmp/local_cpu_report.json
+        run: python scripts/compare_reports.py --baseline reports/pytorch_baseline_report.json --candidate reports/onnxruntime_report.json

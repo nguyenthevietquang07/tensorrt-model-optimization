@@ -8,8 +8,15 @@ reports/*
 !reports/demo_benchmark.json
 !reports/comparison_report.json
 !reports/iris_real_data_benchmark.json
-models/
+!reports/pytorch_baseline_report.json
+!reports/onnxruntime_report.json
+!reports/onnx_correctness_report.json
+!reports/onnx_comparison_report.json
+!reports/torch_onnx_demo.json
+models/*
 *.onnx
+!models/
+!models/iris_mlp.onnx
 *.engine
 *.plan
 dist/

@@ -16,6 +16,10 @@ between local CPU evidence and GPU/TensorRT evidence.
 ## What It Demonstrates
 
 - Benchmark result schema
+- Real PyTorch CPU baseline model
+- ONNX export path
+- ONNX Runtime CPU inference benchmark
+- Correctness comparison between PyTorch and ONNX Runtime logits
 - Local CPU inference benchmark
 - Real UCI Iris data benchmark with latency and accuracy reporting
 - Report comparison utility with comparable-setting checks
@@ -29,7 +33,7 @@ between local CPU evidence and GPU/TensorRT evidence.
 | Layer | Tools |
 |---|---|
 | Benchmarking | Python, dataclasses, timing harness, JSON reports |
-| Model path | local CPU fallback, ONNX/TensorRT extension points |
+| Model path | PyTorch CPU baseline, ONNX export, ONNX Runtime CPU, TensorRT extension point |
 | Data | UCI Iris fetcher, train/test split, centroid classifier baseline |
 | GPU workflow | Colab notebook plan for training/export/acceleration evidence |
 | Validation | comparable-setting checks, baseline/candidate report comparison |
@@ -85,17 +89,37 @@ Latest measured report: `reports/iris_real_data_benchmark.json`.
 | p95 inference latency | 0.1575 ms |
 | Trials | 200 |
 
+Run the PyTorch-to-ONNX export and ONNX Runtime benchmark:
+
+```bash
+python scripts/torch_onnx_demo.py
+python scripts/compare_reports.py --baseline reports/pytorch_baseline_report.json --candidate reports/onnxruntime_report.json
+```
+
+Latest ONNX report artifacts:
+
+| Measurement | Value |
+|---|---:|
+| PyTorch baseline mean latency | 0.0658 ms |
+| ONNX Runtime mean latency | 0.0225 ms |
+| Comparable CPU mean speedup | 2.9244x |
+| Comparable CPU p95 speedup | 4.4027x |
+| PyTorch/ONNX prediction agreement | 1.0 |
+| Max logit absolute difference | 0.00000095 |
+
 This is real local CPU inference evidence. TensorRT speedup evidence requires a
-saved GPU/ONNX/TensorRT report from comparable hardware and input settings.
+saved GPU/TensorRT report from comparable hardware and input settings.
 
 ## Quickstart
 
 Run local benchmark and comparison utilities:
 
 ```bash
+python -m pip install -r requirements.txt
 python -m src.modelopt.benchmark --trials 25
 python -m src.modelopt.benchmark --trials 25 --output reports/local_cpu_report.json
 python scripts/iris_real_data_benchmark.py --trials 200
+python scripts/torch_onnx_demo.py
 python scripts/compare_reports.py --baseline reports/local_cpu_report.json --candidate reports/local_cpu_report.json
 ```
 
@@ -120,9 +144,10 @@ before using any speedup metric.
 ## Portfolio Positioning
 
 Built an ML optimization scaffold for benchmarking baseline inference, export
-paths, real UCI Iris local inference, latency/accuracy reporting, comparable
-report validation, and optional TensorRT/ONNX acceleration, with CI tests and a
-Colab-first GPU workflow for reproducible measurements.
+paths, PyTorch-to-ONNX export, ONNX Runtime CPU inference, real UCI Iris local
+inference, latency/accuracy reporting, comparable report validation, and
+optional TensorRT acceleration, with CI tests and a Colab-first GPU workflow for
+reproducible measurements.
 
 Current scope: CPU-safe benchmark and optimization scaffold. TensorRT speedup
 claims require a saved Colab or local GPU report with comparable hardware,

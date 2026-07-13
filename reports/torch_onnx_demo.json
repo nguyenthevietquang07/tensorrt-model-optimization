@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "candidate_backend_is_onnxruntime": true,
+    "comparison_is_comparable": true,
+    "correctness_passed": true,
+    "onnx_accuracy_recorded": true,
+    "onnx_export_exists": true,
+    "pytorch_accuracy_recorded": true
+  },
+  "claim_boundary": "This demo verifies PyTorch CPU baseline, ONNX export, ONNX Runtime CPU inference, and correctness comparison. It is not TensorRT GPU speedup evidence.",
+  "onnx_path": "models\\iris_mlp.onnx",
+  "passed": true,
+  "project": "tensorrt-model-optimization",
+  "stage": "torch_onnx_demo"
+}
