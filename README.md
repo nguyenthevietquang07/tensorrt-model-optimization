@@ -24,7 +24,7 @@ between local CPU evidence and GPU/TensorRT evidence.
 - Real UCI Iris data benchmark with latency and accuracy reporting
 - Report comparison utility with comparable-setting checks
 - Optional ONNX Runtime and TensorRT extension points
-- Colab-first training, export, and acceleration plan
+- Colab-first GPU training, export, acceleration, and artifact validation plan
 - CI tests for benchmark reporting, data loading, and comparison logic
 - QA notes for avoiding unverifiable speedup claims
 
@@ -35,7 +35,7 @@ between local CPU evidence and GPU/TensorRT evidence.
 | Benchmarking | Python, dataclasses, timing harness, JSON reports |
 | Model path | PyTorch CPU baseline, ONNX export, ONNX Runtime CPU, TensorRT extension point |
 | Data | UCI Iris fetcher, train/test split, centroid classifier baseline |
-| GPU workflow | Colab notebook plan for training/export/acceleration evidence |
+| GPU workflow | Colab GPU notebook, CUDA/TensorRT provider detection, artifact validator |
 | Validation | comparable-setting checks, baseline/candidate report comparison |
 | Quality | unittest, benchmark demo, comparison demo, GitHub Actions |
 
@@ -60,8 +60,9 @@ flowchart TB
     Baseline --> Compare["Comparison utility"]
     Candidate --> Compare
     Compare --> Evidence["Saved evidence report"]
-    Colab["Colab GPU workflow"] --> Export["Future ONNX export"]
-    Export --> TensorRT["Future TensorRT engine"]
+    Colab["Colab GPU workflow"] --> Export["ONNX export"]
+    Export --> Providers["ONNX Runtime CUDA or TensorRT provider"]
+    Providers --> TensorRT["TensorRT evidence when provider is available"]
     TensorRT --> Candidate
     Tests["Unit tests"] --> Compare
     Tests --> Evidence
@@ -110,6 +111,33 @@ Latest ONNX report artifacts:
 This is real local CPU inference evidence. TensorRT speedup evidence requires a
 saved GPU/TensorRT report from comparable hardware and input settings.
 
+## Colab GPU Artifact Workflow
+
+Use `notebooks/colab_training_plan.ipynb` in a Colab GPU runtime to generate
+GPU artifacts. The notebook trains the Iris MLP, exports ONNX, benchmarks
+PyTorch CUDA against the best available ONNX Runtime GPU provider, and saves
+JSON evidence under `reports/`.
+
+Validate downloaded artifacts with:
+
+```bash
+python scripts/validate_colab_gpu_artifacts.py
+```
+
+Expected GPU artifacts:
+
+- `reports/colab_gpu_environment.json`
+- `reports/colab_gpu_pytorch_report.json`
+- `reports/colab_gpu_candidate_report.json`
+- `reports/colab_gpu_correctness_report.json`
+- `reports/colab_gpu_comparison_report.json`
+- `reports/colab_gpu_validation.json`
+
+If the selected provider is `CUDAExecutionProvider`, the artifacts support GPU
+inference evidence but not TensorRT speedup wording. TensorRT-specific claims
+require `selected_provider: "TensorrtExecutionProvider"` and passing correctness
+and comparable-setting reports.
+
 ## Quickstart
 
 Run local benchmark and comparison utilities:
@@ -140,6 +168,7 @@ before using any speedup metric.
 - `docs/qa_ci.md`: test strategy, CI checks, and quality gates
 - `docs/real_data_pipeline.md`: source, measurement method, and claim boundary
 - `docs/agile_backlog.md`: prioritized backlog and delivery plan
+- `docs/colab_gpu_runbook.md`: exact Colab GPU run and claim-boundary checklist
 
 ## Portfolio Positioning
 

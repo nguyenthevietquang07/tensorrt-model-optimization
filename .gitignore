@@ -13,6 +13,12 @@ reports/*
 !reports/onnx_correctness_report.json
 !reports/onnx_comparison_report.json
 !reports/torch_onnx_demo.json
+!reports/colab_gpu_environment.json
+!reports/colab_gpu_pytorch_report.json
+!reports/colab_gpu_candidate_report.json
+!reports/colab_gpu_correctness_report.json
+!reports/colab_gpu_comparison_report.json
+!reports/colab_gpu_validation.json
 models/*
 *.onnx
 !models/
