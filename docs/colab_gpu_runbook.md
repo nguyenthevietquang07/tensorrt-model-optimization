@@ -39,4 +39,5 @@ Use TensorRT-specific wording only when:
 - `reports/colab_gpu_validation.json` has `passed: true`.
 
 If the selected provider is `CUDAExecutionProvider`, describe the result as
-ONNX Runtime GPU evidence and keep TensorRT wording as a planned extension.
+ONNX Runtime GPU evidence and reserve TensorRT wording for a run that actually
+uses `TensorrtExecutionProvider`.

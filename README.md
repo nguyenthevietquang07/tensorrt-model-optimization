@@ -3,8 +3,8 @@
 [![CI](https://github.com/nguyenthevietquang07/tensorrt-model-optimization/actions/workflows/ci.yml/badge.svg)](https://github.com/nguyenthevietquang07/tensorrt-model-optimization/actions/workflows/ci.yml)
 
 ML systems project for benchmarking model-export and inference paths. The local
-code is dependency-light and CPU-safe; the Colab workflow is the planned path
-for GPU training, ONNX export, and TensorRT-specific acceleration evidence.
+code is dependency-light and CPU-safe; the Colab workflow produces GPU
+artifacts for ONNX Runtime CUDA or TensorRT-specific acceleration evidence.
 
 ## Why This Project Exists
 
@@ -24,7 +24,7 @@ between local CPU evidence and GPU/TensorRT evidence.
 - Real UCI Iris data benchmark with latency and accuracy reporting
 - Report comparison utility with comparable-setting checks
 - Optional ONNX Runtime and TensorRT extension points
-- Colab-first GPU training, export, acceleration, and artifact validation plan
+- Colab GPU training, export, acceleration, and artifact validation workflow
 - CI tests for benchmark reporting, data loading, and comparison logic
 - QA notes for avoiding unverifiable speedup claims
 
@@ -167,17 +167,17 @@ before using any speedup metric.
 
 - `docs/qa_ci.md`: test strategy, CI checks, and quality gates
 - `docs/real_data_pipeline.md`: source, measurement method, and claim boundary
-- `docs/agile_backlog.md`: prioritized backlog and delivery plan
+- `docs/engineering_quality.md`: completed engineering practices and evidence rules
 - `docs/colab_gpu_runbook.md`: exact Colab GPU run and claim-boundary checklist
 
 ## Portfolio Positioning
 
-Built an ML optimization scaffold for benchmarking baseline inference, export
+Built an ML optimization toolkit for benchmarking baseline inference, export
 paths, PyTorch-to-ONNX export, ONNX Runtime CPU inference, real UCI Iris local
 inference, latency/accuracy reporting, comparable report validation, and
-optional TensorRT acceleration, with CI tests and a Colab-first GPU workflow for
+optional TensorRT acceleration, with CI tests and a Colab GPU workflow for
 reproducible measurements.
 
-Current scope: CPU-safe benchmark and optimization scaffold. TensorRT speedup
-claims require a saved Colab or local GPU report with comparable hardware,
-batch size, precision, and input settings.
+Scope: CPU-safe benchmark and optimization toolkit with a runnable Colab GPU
+artifact workflow. TensorRT speedup claims require a saved Colab or local GPU
+report with comparable hardware, batch size, precision, and input settings.
