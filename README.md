@@ -68,6 +68,43 @@ flowchart TB
     Tests --> Evidence
 ```
 
+## Recruiter Demo
+
+This demo is designed to show an ML systems workflow: train/export a small
+model, compare inference backends, validate correctness, and only then discuss
+speedup. The local path is CPU-safe; the committed Colab artifacts provide the
+GPU/TensorRT evidence.
+
+```bash
+python scripts/iris_real_data_benchmark.py --trials 200
+python scripts/torch_onnx_demo.py
+python scripts/compare_reports.py --baseline reports/pytorch_baseline_report.json --candidate reports/onnxruntime_report.json
+python scripts/validate_colab_gpu_artifacts.py
+```
+
+What the demo proves:
+
+| Area | Feature | Evidence |
+|---|---|---|
+| Real data pipeline | UCI Iris fetch, split, and local benchmark | `reports/iris_real_data_benchmark.json` |
+| Export path | PyTorch model exported to ONNX | `models/iris_mlp.onnx`, `reports/torch_onnx_demo.json` |
+| Correctness | PyTorch vs ONNX Runtime logit comparison | `reports/onnx_correctness_report.json` |
+| CPU optimization evidence | Comparable PyTorch CPU vs ONNX Runtime CPU latency | `reports/onnx_comparison_report.json` |
+| GPU acceleration evidence | Colab Tesla T4 TensorRT provider run | `reports/colab_gpu_validation.json` |
+| Claim discipline | Provider, trial count, comparable settings, caveats | `scripts/validate_colab_gpu_artifacts.py` |
+
+Demo talking points:
+
+- Built a reproducible inference benchmarking toolkit with JSON reports,
+  comparable-setting checks, and correctness validation.
+- Exported a PyTorch Iris MLP to ONNX and verified prediction agreement with
+  max absolute logit difference of `0.00000095` on the CPU path.
+- Validated a Colab Tesla T4 run using `TensorrtExecutionProvider`, 200 trials,
+  and a saved `11.1290x` comparable mean speedup over PyTorch CUDA for this
+  benchmark.
+- Kept the README honest by separating local CPU evidence, ONNX Runtime
+  evidence, and TensorRT-specific GPU evidence.
+
 ## Measured Evidence
 
 Run the real-data local inference benchmark:
