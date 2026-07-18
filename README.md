@@ -226,7 +226,7 @@ python -m src.modelopt.benchmark --trials 25 --output reports/local_cpu_report.j
 python scripts/iris_real_data_benchmark.py --trials 200
 python scripts/digits_real_data_benchmark.py --trials 200
 python scripts/torch_onnx_demo.py
-python scripts/compare_reports.py --baseline reports/local_cpu_report.json --candidate reports/local_cpu_report.json
+python scripts/compare_reports.py --baseline reports/pytorch_baseline_report.json --candidate reports/onnxruntime_report.json
 ```
 
 Run tests:
