@@ -7,6 +7,8 @@ separation between CPU, GPU, and TensorRT evidence.
 
 - Local CPU benchmark harness with JSON report output.
 - Real UCI Iris benchmark with latency and accuracy measurements.
+- Offline handwritten-digits benchmark to reduce reliance on a tiny four-feature
+  dataset for local evidence.
 - PyTorch-to-ONNX export path with ONNX Runtime CPU benchmark.
 - Correctness comparison between PyTorch logits and ONNX Runtime logits.
 - Comparable-report validation before using any speedup metric.
@@ -18,6 +20,7 @@ separation between CPU, GPU, and TensorRT evidence.
 ## Evidence Rules
 
 - CPU reports prove local CPU behavior only.
+- Iris and digits reports prove only the named local benchmark workloads.
 - CUDA provider reports prove GPU inference behavior, not TensorRT speedup.
 - TensorRT wording requires a saved report with
   `selected_provider: "TensorrtExecutionProvider"`, comparable settings, and

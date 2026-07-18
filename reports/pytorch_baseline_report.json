@@ -1,8 +1,8 @@
 {
   "backend": "pytorch_cpu_mlp",
   "claim_boundary": "Use this report as measurement evidence for the named backend only; do not claim TensorRT speedup until baseline and optimized reports are saved from comparable hardware and input settings.",
-  "max_ms": 0.2693,
-  "mean_ms": 0.0568,
+  "max_ms": 0.1692,
+  "mean_ms": 0.0423,
   "metadata": {
     "accuracy": 0.966667,
     "batch_size": 30,
@@ -12,8 +12,8 @@
     "trials": 100,
     "vector_size": 4
   },
-  "p50_ms": 0.0492,
-  "p95_ms": 0.0914,
+  "p50_ms": 0.0387,
+  "p95_ms": 0.0607,
   "status": "benchmark_report_not_speedup_claim",
   "trials": 100
 }

@@ -22,6 +22,7 @@ between local CPU evidence and GPU/TensorRT evidence.
 - Correctness comparison between PyTorch and ONNX Runtime logits
 - Local CPU inference benchmark
 - Real UCI Iris data benchmark with latency and accuracy reporting
+- Offline handwritten-digits benchmark with larger sample and feature counts
 - Report comparison utility with comparable-setting checks
 - Optional ONNX Runtime and TensorRT extension points
 - Colab GPU training, export, acceleration, and artifact validation workflow
@@ -34,7 +35,7 @@ between local CPU evidence and GPU/TensorRT evidence.
 |---|---|
 | Benchmarking | Python, dataclasses, timing harness, JSON reports |
 | Model path | PyTorch CPU baseline, ONNX export, ONNX Runtime CPU, TensorRT extension point |
-| Data | UCI Iris fetcher, train/test split, centroid classifier baseline |
+| Data | UCI Iris fetcher, scikit-learn digits dataset, train/test split, centroid classifier baselines |
 | GPU workflow | Colab GPU notebook, CUDA/TensorRT provider detection, artifact validator |
 | Validation | comparable-setting checks, baseline/candidate report comparison |
 | Quality | unittest, benchmark demo, comparison demo, GitHub Actions |
@@ -68,42 +69,46 @@ flowchart TB
     Tests --> Evidence
 ```
 
-## Recruiter Demo
+## Project Walkthrough
 
-This demo is designed to show an ML systems workflow: train/export a small
-model, compare inference backends, validate correctness, and only then discuss
-speedup. The local path is CPU-safe; the committed Colab artifacts provide the
-GPU/TensorRT evidence.
+Run these commands to benchmark local inference, export a small PyTorch model
+to ONNX, compare inference reports, and validate the saved Colab GPU artifacts.
+The local path is CPU-safe; TensorRT-specific evidence comes from the committed
+Colab reports.
 
 ```bash
 python scripts/iris_real_data_benchmark.py --trials 200
+python scripts/digits_real_data_benchmark.py --trials 200
 python scripts/torch_onnx_demo.py
 python scripts/compare_reports.py --baseline reports/pytorch_baseline_report.json --candidate reports/onnxruntime_report.json
 python scripts/validate_colab_gpu_artifacts.py
 ```
 
-What the demo proves:
+Evidence map:
 
 | Area | Feature | Evidence |
 |---|---|---|
 | Real data pipeline | UCI Iris fetch, split, and local benchmark | `reports/iris_real_data_benchmark.json` |
+| Larger local workload | Handwritten digits, 64 features, 10 classes | `reports/digits_real_data_benchmark.json` |
 | Export path | PyTorch model exported to ONNX | `models/iris_mlp.onnx`, `reports/torch_onnx_demo.json` |
 | Correctness | PyTorch vs ONNX Runtime logit comparison | `reports/onnx_correctness_report.json` |
 | CPU optimization evidence | Comparable PyTorch CPU vs ONNX Runtime CPU latency | `reports/onnx_comparison_report.json` |
 | GPU acceleration evidence | Colab Tesla T4 TensorRT provider run | `reports/colab_gpu_validation.json` |
 | Claim discipline | Provider, trial count, comparable settings, caveats | `scripts/validate_colab_gpu_artifacts.py` |
 
-Demo talking points:
+Implementation notes:
 
 - Built a reproducible inference benchmarking toolkit with JSON reports,
   comparable-setting checks, and correctness validation.
+- Added an offline handwritten-digits benchmark so the local evidence is not
+  limited to the tiny Iris dataset.
 - Exported a PyTorch Iris MLP to ONNX and verified prediction agreement with
   max absolute logit difference of `0.00000095` on the CPU path.
-- Validated a Colab Tesla T4 run using `TensorrtExecutionProvider`, 200 trials,
-  and a saved `11.1290x` comparable mean speedup over PyTorch CUDA for this
+- The saved Colab Tesla T4 run used `TensorrtExecutionProvider`, 200 trials,
+  and reports an `11.1290x` comparable mean speedup over PyTorch CUDA for this
   benchmark.
-- Kept the README honest by separating local CPU evidence, ONNX Runtime
-  evidence, and TensorRT-specific GPU evidence.
+- Separated local CPU evidence, ONNX Runtime evidence, and TensorRT-specific
+  GPU evidence.
 
 ## Measured Evidence
 
@@ -111,6 +116,7 @@ Run the real-data local inference benchmark:
 
 ```bash
 python scripts/iris_real_data_benchmark.py --trials 200
+python scripts/digits_real_data_benchmark.py --trials 200
 ```
 
 Latest measured report: `reports/iris_real_data_benchmark.json`.
@@ -127,6 +133,20 @@ Latest measured report: `reports/iris_real_data_benchmark.json`.
 | p95 inference latency | 0.1575 ms |
 | Trials | 200 |
 
+Latest larger local benchmark: `reports/digits_real_data_benchmark.json`.
+
+| Measurement | Value |
+|---|---:|
+| Dataset | scikit-learn handwritten digits |
+| Samples processed | 1797 |
+| Train/test split | 1547 / 250 |
+| Features | 64 |
+| Classes | 10 |
+| Accuracy | 0.860000 |
+| Mean inference latency | 23.7731 ms |
+| p95 inference latency | 33.4859 ms |
+| Trials | 200 |
+
 Run the PyTorch-to-ONNX export and ONNX Runtime benchmark:
 
 ```bash
@@ -138,10 +158,10 @@ Latest ONNX report artifacts:
 
 | Measurement | Value |
 |---|---:|
-| PyTorch baseline mean latency | 0.0658 ms |
-| ONNX Runtime mean latency | 0.0225 ms |
-| Comparable CPU mean speedup | 2.9244x |
-| Comparable CPU p95 speedup | 4.4027x |
+| PyTorch baseline mean latency | 0.0423 ms |
+| ONNX Runtime mean latency | 0.0227 ms |
+| Comparable CPU mean speedup | 1.8634x |
+| Comparable CPU p95 speedup | 2.5397x |
 | PyTorch/ONNX prediction agreement | 1.0 |
 | Max logit absolute difference | 0.00000095 |
 
@@ -204,6 +224,7 @@ python -m pip install -r requirements.txt
 python -m src.modelopt.benchmark --trials 25
 python -m src.modelopt.benchmark --trials 25 --output reports/local_cpu_report.json
 python scripts/iris_real_data_benchmark.py --trials 200
+python scripts/digits_real_data_benchmark.py --trials 200
 python scripts/torch_onnx_demo.py
 python scripts/compare_reports.py --baseline reports/local_cpu_report.json --candidate reports/local_cpu_report.json
 ```
@@ -227,14 +248,10 @@ before using any speedup metric.
 - `docs/engineering_quality.md`: completed engineering practices and evidence rules
 - `docs/colab_gpu_runbook.md`: exact Colab GPU run and claim-boundary checklist
 
-## Portfolio Positioning
+## Scope
 
-Built an ML optimization toolkit for benchmarking baseline inference, export
-paths, PyTorch-to-ONNX export, ONNX Runtime CPU inference, real UCI Iris local
-inference, latency/accuracy reporting, comparable report validation, and
-optional TensorRT acceleration, with CI tests and a Colab GPU workflow for
-reproducible measurements.
-
-Scope: CPU-safe benchmark and optimization toolkit with a runnable Colab GPU
-artifact workflow. TensorRT speedup claims require a saved Colab or local GPU
-report with comparable hardware, batch size, precision, and input settings.
+This is a CPU-safe benchmarking toolkit with PyTorch-to-ONNX export, ONNX
+Runtime CPU inference, local Iris and handwritten-digits benchmarks, comparable
+report validation, CI tests, and a Colab GPU artifact workflow. TensorRT speedup
+claims require a saved Colab or local GPU report with comparable hardware,
+batch size, precision, and input settings.

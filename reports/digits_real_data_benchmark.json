@@ -1,0 +1,23 @@
+{
+  "backend": "local_cpu_digits_centroid_classifier",
+  "claim_boundary": "Use this report as measurement evidence for the named backend only; do not claim TensorRT speedup until baseline and optimized reports are saved from comparable hardware and input settings.",
+  "max_ms": 42.7268,
+  "mean_ms": 23.7731,
+  "metadata": {
+    "accuracy": 0.86,
+    "checksum": 230200,
+    "class_count": 10,
+    "dataset": "scikit-learn handwritten digits",
+    "feature_count": 64,
+    "load_seconds": 13.018,
+    "sample_count": 1797,
+    "test_samples": 250,
+    "train_samples": 1547
+  },
+  "p50_ms": 22.3228,
+  "p95_ms": 33.4859,
+  "passion_project_note": "Added to reduce reliance on the tiny Iris benchmark by measuring a larger, offline handwritten-digit workload before making hardware-specific acceleration claims.",
+  "pipeline": "digits_real_data_inference_benchmark",
+  "status": "benchmark_report_not_speedup_claim",
+  "trials": 200
+}

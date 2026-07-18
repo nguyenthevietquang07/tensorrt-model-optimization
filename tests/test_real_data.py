@@ -1,11 +1,17 @@
 import unittest
 
 from src.modelopt.real_data import (
+    DigitsBenchmarkConfig,
+    DigitsSample,
     IrisBenchmarkConfig,
     parse_iris_csv,
+    run_digits_real_data_benchmark,
     run_iris_real_data_benchmark,
+    score_digits_accuracy,
     score_accuracy,
+    split_digits_by_class,
     split_by_class,
+    train_vector_centroid_model,
     train_centroid_model,
 )
 
@@ -45,6 +51,26 @@ class RealDataBenchmarkTests(unittest.TestCase):
         self.assertEqual(report["metadata"]["sample_count"], 36)
         self.assertEqual(report["metadata"]["accuracy"], 1.0)
         self.assertGreater(report["mean_ms"], 0)
+
+    def test_digits_benchmark_report_has_larger_workload(self):
+        samples = [
+            DigitsSample(tuple([float(label)] * 64), label)
+            for label in range(10)
+            for _ in range(8)
+        ]
+        train, test = split_digits_by_class(samples, holdout_per_class=2)
+        model = train_vector_centroid_model(train)
+        report = run_digits_real_data_benchmark(
+            DigitsBenchmarkConfig(trials=3, holdout_per_class=2),
+            samples=samples,
+        )
+
+        self.assertEqual(len(train), 60)
+        self.assertEqual(len(test), 20)
+        self.assertEqual(score_digits_accuracy(model, test), 1.0)
+        self.assertEqual(report["pipeline"], "digits_real_data_inference_benchmark")
+        self.assertEqual(report["metadata"]["feature_count"], 64)
+        self.assertEqual(report["metadata"]["class_count"], 10)
 
 
 if __name__ == "__main__":
